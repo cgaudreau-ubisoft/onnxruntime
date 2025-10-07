@@ -7,6 +7,7 @@
 #include "core/common/common.h"
 #include "core/framework/op_kernel.h"
 #include "contrib_ops/cpu/bert/attention_common.h"
+#include "contrib_ops/cpu/bert/attention_parameters.h"
 
 namespace onnxruntime {
 namespace contrib {
@@ -18,7 +19,7 @@ class AttentionBase {
                      const TensorShape& bias_shape,
                      const Tensor*& mask_index,  // Dummy mask of shape (1 or batch_size, 1) will be updated to nullptr.
                      const Tensor* past,
-                     const Tensor* relative_position_bias,
+                     const Tensor* attention_bias,
                      void* parameters,
                      const int max_threads_per_block,  // for CUDA
                      const Tensor* past_seq_len = nullptr) const;
@@ -63,7 +64,7 @@ class AttentionBase {
                      const TensorShape& bias_shape,
                      const Tensor*& mask_index,  // Dummy mask of shape (1 or batch_size, 1) will be updated to nullptr.
                      const Tensor* past,
-                     const Tensor* relative_position_bias,
+                     const Tensor* attention_bias,
                      void* parameters,
                      const Tensor* past_seq_len = nullptr) const;
 

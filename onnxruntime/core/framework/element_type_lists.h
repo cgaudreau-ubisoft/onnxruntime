@@ -11,6 +11,8 @@
 #include "core/common/type_list.h"
 #include "core/framework/float8.h"
 #include "core/framework/float16.h"
+#include "core/framework/int4.h"
+#include "core/framework/float4.h"
 
 namespace onnxruntime {
 
@@ -82,6 +84,26 @@ using AllIRv9 =
 using AllIRv9 = AllIRv4;
 #endif
 
+using AllIRv10 =
+    boost::mp11::mp_push_back<
+        AllIRv9,
+        UInt4x2,
+        Int4x2>;
+
+#if !defined(DISABLE_FLOAT4_TYPES)
+using AllIRv11 =
+    boost::mp11::mp_push_back<
+        AllIRv10,
+        Float4E2M1x2>;
+#else
+using AllIRv11 = AllIRv10;
+#endif
+
+// TODO: This needs upgrade to some newer version ,buit it has been
+// at this version for a while and it needs changes at the use sites
+// where-in the types in the newer IR versions are not supported.
+// This may need a sweep across multiple EPs as this is mostly used
+// for kernel registration.
 using All = AllIRv4;
 
 #if !defined(DISABLE_FLOAT8_TYPES)
@@ -91,6 +113,10 @@ using AllFloat8 =
         Float8E4M3FNUZ,
         Float8E5M2,
         Float8E5M2FNUZ>;
+#endif
+
+#if !defined(DISABLE_FLOAT4_TYPES)
+using AllFloat4 = TypeList<Float4E2M1x2>;
 #endif
 
 using AllIeeeFloat =
